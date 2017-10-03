@@ -4,9 +4,27 @@ project(RemoteShell CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(Sources)
+option(BUILD_UNIT_TESTS "Build unit tests" OFF)
+include_directories(${CMAKE_CURRENT_LIST_DIR})
 
+add_library(${PROJECT_NAME}.Classes OBJECT
+    System/SystemCall.cpp)
 add_executable(ShellClient
-    Sources/ShellClient.cpp)
+    Application/ShellClient.cpp
+    $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 add_executable(ShellServer
-    Sources/ShellServer.cpp)
+    Application/ShellServer.cpp
+    $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
+
+if (BUILD_UNIT_TESTS)
+    find_package(GTest REQUIRED)
+    target_compile_definitions(${PROJECT_NAME}.Classes PRIVATE
+        "BUILD_UNIT_TESTS")
+    add_executable(${PROJECT_NAME}.Tests
+        $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
+    target_link_libraries(${PROJECT_NAME}.Tests GTest::Main)
+    target_link_libraries(ShellClient GTest::GTest)
+    target_link_libraries(ShellServer GTest::GTest)
+    enable_testing()
+    add_test(Tests ${PROJECT_NAME}.Tests)
+endif()
