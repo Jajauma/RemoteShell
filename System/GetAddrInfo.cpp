@@ -3,6 +3,7 @@
 
 #include <cerrno>
 #include <cstring>
+#include <string>
 #include <system_error>
 
 #include <netdb.h>
@@ -50,6 +51,11 @@ const addrinfo& GetAddrInfo::Iterator::operator*() const
     return *mValue;
 }
 
+GetAddrInfo::GetAddrInfo(Protocol protocol, const char* host, int port)
+    : GetAddrInfo{protocol, host, std::to_string(port).c_str()}
+{
+}
+
 GetAddrInfo::GetAddrInfo(Protocol protocol, const char* host, const char* port)
 {
     CXX_VALIDATE_ARG(!(host == nullptr && port == nullptr));
@@ -95,6 +101,12 @@ GetAddrInfo::GetAddrInfo(Protocol protocol, const char* host, const char* port)
     if (ret != 0)
         throw std::system_error{
             errno, std::generic_category(), ::gai_strerror(ret)};
+}
+
+GetAddrInfo::GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,
+                         int port)
+    : GetAddrInfo{protocol, specialAddress, std::to_string(port).c_str()}
+{
 }
 
 GetAddrInfo::GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,

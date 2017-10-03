@@ -12,7 +12,9 @@ enum class SpecialAddress { Loopback, Wildcard };
 class GetAddrInfo
 {
 public:
+    GetAddrInfo(Protocol protocol, const char* host, int port);
     GetAddrInfo(Protocol protocol, const char* host, const char* port);
+    GetAddrInfo(Protocol protocol, SpecialAddress specialAddress, int port);
     GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,
                 const char* port);
     GetAddrInfo(GetAddrInfo&& other);
