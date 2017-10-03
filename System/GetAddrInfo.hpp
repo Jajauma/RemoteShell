@@ -1,6 +1,8 @@
 #ifndef HEADER_DDD50F64_A85B_11E7_BC31_74D4359F3068_INCLUDED
 #define HEADER_DDD50F64_A85B_11E7_BC31_74D4359F3068_INCLUDED
 
+#include <iterator>
+
 struct addrinfo;
 
 namespace System {
@@ -16,6 +18,24 @@ public:
     GetAddrInfo(GetAddrInfo&& other);
     GetAddrInfo& operator=(GetAddrInfo&& other);
     ~GetAddrInfo();
+
+    class Iterator : public std::iterator<std::input_iterator_tag, addrinfo>
+    {
+    public:
+        explicit Iterator(addrinfo* value = nullptr);
+        Iterator& operator++();
+        Iterator operator++(int);
+        bool operator==(const Iterator& other) const;
+        bool operator!=(const Iterator& other) const;
+        const addrinfo& operator*() const;
+
+    private:
+        addrinfo* mValue;
+    };
+
+    Iterator begin() const;
+    Iterator end() const;
+    int size() const;
 
 private:
     addrinfo* mResult;

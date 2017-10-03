@@ -15,6 +15,41 @@
 
 using namespace System;
 
+GetAddrInfo::Iterator::Iterator(addrinfo* value)
+    : mValue{value}
+{
+}
+
+GetAddrInfo::Iterator& GetAddrInfo::Iterator::operator++()
+{
+    mValue = mValue ? mValue->ai_next : nullptr;
+    return *this;
+}
+
+GetAddrInfo::Iterator GetAddrInfo::Iterator::operator++(int)
+{
+    Iterator result{*this};
+    ++(*this);
+    return result;
+}
+
+bool
+GetAddrInfo::Iterator::operator==(const Iterator& other) const
+{
+    return mValue == other.mValue;
+}
+
+bool
+GetAddrInfo::Iterator::operator!=(const Iterator& other) const
+{
+    return mValue != other.mValue;
+}
+
+const addrinfo& GetAddrInfo::Iterator::operator*() const
+{
+    return *mValue;
+}
+
 GetAddrInfo::GetAddrInfo(Protocol protocol, const char* host, const char* port)
 {
     CXX_VALIDATE_ARG(!(host == nullptr && port == nullptr));
@@ -136,6 +171,24 @@ GetAddrInfo::~GetAddrInfo()
         ::freeaddrinfo(mResult);
 }
 
+GetAddrInfo::Iterator
+GetAddrInfo::begin() const
+{
+    return Iterator{mResult};
+}
+
+GetAddrInfo::Iterator
+GetAddrInfo::end() const
+{
+    return Iterator{};
+}
+
+int
+GetAddrInfo::size() const
+{
+    return std::distance(begin(), end());
+}
+
 #if defined(BUILD_UNIT_TESTS)
 TEST(GetAddrInfo, MoveConstructor)
 {
@@ -221,5 +274,50 @@ TEST(GetAddrInfo, ConstructorSpecial)
         GetAddrInfo(Protocol::UDP4, SpecialAddress::Wildcard, "3389"));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::UDP6, SpecialAddress::Wildcard, "3389"));
+}
+
+TEST(GetAddrInfo, SizeIP4AndIP6)
+{
+    GetAddrInfo tcpLoopback{Protocol::TCP, SpecialAddress::Loopback, "1234"};
+    EXPECT_EQ(tcpLoopback.size(), 2);
+
+    GetAddrInfo udpLoopback{Protocol::UDP, SpecialAddress::Loopback, "1234"};
+    EXPECT_EQ(udpLoopback.size(), 2);
+
+    GetAddrInfo tcpWildcard{Protocol::TCP, SpecialAddress::Wildcard, "1234"};
+    EXPECT_EQ(tcpWildcard.size(), 2);
+
+    GetAddrInfo udpWildcard{Protocol::UDP, SpecialAddress::Wildcard, "1234"};
+    EXPECT_EQ(udpWildcard.size(), 2);
+}
+
+TEST(GetAddrInfo, SizeIP4)
+{
+    GetAddrInfo tcpLoopback{Protocol::TCP4, SpecialAddress::Loopback, "1234"};
+    EXPECT_EQ(tcpLoopback.size(), 1);
+
+    GetAddrInfo udpLoopback{Protocol::UDP4, SpecialAddress::Loopback, "1234"};
+    EXPECT_EQ(udpLoopback.size(), 1);
+
+    GetAddrInfo tcpWildcard{Protocol::TCP4, SpecialAddress::Wildcard, "1234"};
+    EXPECT_EQ(tcpWildcard.size(), 1);
+
+    GetAddrInfo udpWildcard{Protocol::UDP4, SpecialAddress::Wildcard, "1234"};
+    EXPECT_EQ(udpWildcard.size(), 1);
+}
+
+TEST(GetAddrInfo, SizeIP6)
+{
+    GetAddrInfo tcpLoopback{Protocol::TCP6, SpecialAddress::Loopback, "1236"};
+    EXPECT_EQ(tcpLoopback.size(), 1);
+
+    GetAddrInfo udpLoopback{Protocol::UDP6, SpecialAddress::Loopback, "1236"};
+    EXPECT_EQ(udpLoopback.size(), 1);
+
+    GetAddrInfo tcpWildcard{Protocol::TCP6, SpecialAddress::Wildcard, "1236"};
+    EXPECT_EQ(tcpWildcard.size(), 1);
+
+    GetAddrInfo udpWildcard{Protocol::UDP6, SpecialAddress::Wildcard, "1236"};
+    EXPECT_EQ(udpWildcard.size(), 1);
 }
 #endif /* BUILD_UNIT_TESTS */
