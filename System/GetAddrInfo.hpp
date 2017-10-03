@@ -4,13 +4,15 @@
 struct addrinfo;
 
 namespace System {
+enum class Protocol { TCP, TCP4, TCP6, UDP, UDP4, UDP6 };
+enum class SpecialAddress { Loopback, Wildcard };
+
 class GetAddrInfo
 {
 public:
-    enum class Protocol { TCP, TCP4, TCP6, UDP, UDP4, UDP6 };
-    enum class Special { Loopback, Wildcard };
     GetAddrInfo(Protocol protocol, const char* host, const char* port);
-    GetAddrInfo(Protocol protocol, Special special, const char* port);
+    GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,
+                const char* port);
     GetAddrInfo(GetAddrInfo&& other);
     GetAddrInfo& operator=(GetAddrInfo&& other);
     ~GetAddrInfo();

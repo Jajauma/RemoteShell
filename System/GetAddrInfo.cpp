@@ -62,7 +62,8 @@ GetAddrInfo::GetAddrInfo(Protocol protocol, const char* host, const char* port)
             errno, std::generic_category(), ::gai_strerror(ret)};
 }
 
-GetAddrInfo::GetAddrInfo(Protocol protocol, Special special, const char* port)
+GetAddrInfo::GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,
+                         const char* port)
 {
     CXX_VALIDATE_ARG(port != nullptr);
 
@@ -102,7 +103,7 @@ GetAddrInfo::GetAddrInfo(Protocol protocol, Special special, const char* port)
     }
 
     hints.ai_flags = AI_NUMERICSERV | AI_V4MAPPED | AI_ADDRCONFIG;
-    if (special == Special::Wildcard)
+    if (specialAddress == SpecialAddress::Wildcard)
         hints.ai_flags |= AI_PASSIVE;
 
     int ret = ::getaddrinfo(nullptr, port, &hints, &mResult);
@@ -136,10 +137,89 @@ GetAddrInfo::~GetAddrInfo()
 }
 
 #if defined(BUILD_UNIT_TESTS)
-TEST(GetAddrInfo, Test1)
+TEST(GetAddrInfo, MoveConstructor)
 {
-    // GetAddrInfo gai1{"test", "1", nullptr};
-    // GetAddrInfo gai2{std::move(gai1)};
-    // GetAddrInfo gai3 = std::move(gai1);
+    try
+    {
+        GetAddrInfo gai1{Protocol::TCP4, "127.0.0.1", "6000"};
+        GetAddrInfo gai2{std::move(gai1)};
+        SUCCEED();
+    }
+    catch (...)
+    {
+        FAIL();
+    }
+}
+
+TEST(GetAddrInfo, MoveAssignmentOperator)
+{
+    try
+    {
+        GetAddrInfo gai1{Protocol::TCP6, "::1", "7021"};
+        GetAddrInfo gai2 = std::move(gai1);
+        SUCCEED();
+    }
+    catch (...)
+    {
+        FAIL();
+    }
+}
+
+TEST(GetAddrInfo, InvalidArguments)
+{
+    EXPECT_THROW(GetAddrInfo(Protocol::TCP, nullptr, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::TCP4, nullptr, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::TCP6, nullptr, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::UDP, nullptr, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::UDP4, nullptr, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::UDP6, nullptr, nullptr),
+                 std::invalid_argument);
+
+    EXPECT_THROW(GetAddrInfo(Protocol::TCP, SpecialAddress::Loopback, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::TCP4, SpecialAddress::Loopback, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::TCP6, SpecialAddress::Loopback, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::UDP, SpecialAddress::Loopback, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::UDP4, SpecialAddress::Loopback, nullptr),
+                 std::invalid_argument);
+    EXPECT_THROW(GetAddrInfo(Protocol::UDP6, SpecialAddress::Loopback, nullptr),
+                 std::invalid_argument);
+}
+
+TEST(GetAddrInfo, ConstructorSpecial)
+{
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::TCP, SpecialAddress::Loopback, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::TCP4, SpecialAddress::Loopback, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::TCP6, SpecialAddress::Loopback, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::TCP, SpecialAddress::Wildcard, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::TCP4, SpecialAddress::Wildcard, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::TCP6, SpecialAddress::Wildcard, "3389"));
+
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::UDP, SpecialAddress::Loopback, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::UDP4, SpecialAddress::Loopback, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::UDP6, SpecialAddress::Loopback, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::UDP, SpecialAddress::Wildcard, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::UDP4, SpecialAddress::Wildcard, "3389"));
+    EXPECT_NO_THROW(
+        GetAddrInfo(Protocol::UDP6, SpecialAddress::Wildcard, "3389"));
 }
 #endif /* BUILD_UNIT_TESTS */
