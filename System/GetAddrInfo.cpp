@@ -189,6 +189,12 @@ GetAddrInfo::size() const
     return std::distance(begin(), end());
 }
 
+bool
+GetAddrInfo::isEmpty() const
+{
+    return begin() == end();
+}
+
 #if defined(BUILD_UNIT_TESTS)
 TEST(GetAddrInfo, MoveConstructor)
 {
@@ -196,6 +202,8 @@ TEST(GetAddrInfo, MoveConstructor)
     {
         GetAddrInfo gai1{Protocol::TCP4, "127.0.0.1", "6000"};
         GetAddrInfo gai2{std::move(gai1)};
+        EXPECT_TRUE(gai1.isEmpty());
+        EXPECT_FALSE(gai2.isEmpty());
         SUCCEED();
     }
     catch (...)
@@ -210,6 +218,8 @@ TEST(GetAddrInfo, MoveAssignmentOperator)
     {
         GetAddrInfo gai1{Protocol::TCP6, "::1", "7021"};
         GetAddrInfo gai2 = std::move(gai1);
+        EXPECT_TRUE(gai1.isEmpty());
+        EXPECT_FALSE(gai2.isEmpty());
         SUCCEED();
     }
     catch (...)

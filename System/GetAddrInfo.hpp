@@ -36,6 +36,7 @@ public:
     Iterator begin() const;
     Iterator end() const;
     int size() const;
+    bool isEmpty() const;
 
 private:
     addrinfo* mResult;
