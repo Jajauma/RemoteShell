@@ -4,7 +4,6 @@
 #include <cerrno>
 #include <system_error>
 
-#include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -55,23 +54,6 @@ getsockopt(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
     auto ret = ::getsockopt(arg1, arg2, arg3, arg4, arg5);
     if (ret == -1)
         throw std::system_error{errno, std::generic_category()};
-}
-
-template <typename T1, typename T2, typename T3, typename T4>
-void
-getaddrinfo(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
-{
-    auto ret = ::getaddrinfo(arg1, arg2, arg3, arg4);
-    if (ret != 0)
-        throw std::system_error{
-            errno, std::generic_category(), gai_strerror(ret)};
-}
-
-template<typename T1>
-void
-freeaddrinfo(T1 arg1)
-{
-    ::freeaddrinfo(arg1);
 }
 } /* namespace System  */
 
