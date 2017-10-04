@@ -13,7 +13,7 @@ public:
     int port() const;
 
 private:
-    static constexpr auto MaxHost = 1025;
+    static constexpr auto MaxHost    = 1025;
     static constexpr auto MaxService = 32;
     char mHost[MaxHost];
     char mService[MaxService];
