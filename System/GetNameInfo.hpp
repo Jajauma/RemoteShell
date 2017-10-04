@@ -9,13 +9,14 @@ class GetNameInfo
 public:
     GetNameInfo(const sockaddr* addr, socklen_t addrLength);
     const char* host() const;
-    const char* port() const;
+    const char* service() const;
+    int port() const;
 
 private:
-    static constexpr auto MaxHost = 1025;
-    static constexpr auto MaxPort = 32;
+    static constexpr auto MaxHost    = 1025;
+    static constexpr auto MaxService = 32;
     char mHost[MaxHost];
-    char mPort[MaxPort];
+    char mService[MaxService];
 };
 } /* namespace System  */
 
