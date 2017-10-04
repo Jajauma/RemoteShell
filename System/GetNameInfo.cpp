@@ -1,6 +1,7 @@
 #include "GetNameInfo.hpp"
 #include "Cxx/Assert.hpp"
 
+#include <cstdlib>
 #include <system_error>
 
 #include <netdb.h>
@@ -14,14 +15,14 @@ using namespace System;
 GetNameInfo::GetNameInfo(const sockaddr* addr, socklen_t addrLength)
 {
     CXX_VALIDATE_ARG(addr != nullptr && addrLength > 0);
-    mHost[0] = mPort[0] = '\0';
+    mHost[0] = mService[0] = '\0';
 
     int ret = ::getnameinfo(addr,
                             addrLength,
                             mHost,
                             MaxHost,
-                            mPort,
-                            MaxPort,
+                            mService,
+                            MaxService,
                             NI_NUMERICHOST | NI_NUMERICSERV);
     if (ret != 0)
         throw std::system_error{
@@ -35,9 +36,15 @@ GetNameInfo::host() const
 }
 
 const char*
+GetNameInfo::service() const
+{
+    return mService;
+}
+
+int
 GetNameInfo::port() const
 {
-    return mPort;
+    return std::atoi(mService);
 }
 
 #if defined(BUILD_UNIT_TESTS)
