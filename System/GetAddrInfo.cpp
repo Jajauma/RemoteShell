@@ -272,74 +272,74 @@ TEST(GetAddrInfo, InvalidArguments)
 TEST(GetAddrInfo, ConstructorSpecial)
 {
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP, SpecialAddress::Loopback, "3389"));
+        GetAddrInfo(Protocol::TCP, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP4, SpecialAddress::Loopback, "3389"));
+        GetAddrInfo(Protocol::TCP4, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP6, SpecialAddress::Loopback, "3389"));
+        GetAddrInfo(Protocol::TCP6, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP, SpecialAddress::Wildcard, "3389"));
+        GetAddrInfo(Protocol::TCP, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP4, SpecialAddress::Wildcard, "3389"));
+        GetAddrInfo(Protocol::TCP4, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP6, SpecialAddress::Wildcard, "3389"));
+        GetAddrInfo(Protocol::TCP6, SpecialAddress::Wildcard, 3389));
 
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP, SpecialAddress::Loopback, "3389"));
+        GetAddrInfo(Protocol::UDP, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP4, SpecialAddress::Loopback, "3389"));
+        GetAddrInfo(Protocol::UDP4, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP6, SpecialAddress::Loopback, "3389"));
+        GetAddrInfo(Protocol::UDP6, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP, SpecialAddress::Wildcard, "3389"));
+        GetAddrInfo(Protocol::UDP, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP4, SpecialAddress::Wildcard, "3389"));
+        GetAddrInfo(Protocol::UDP4, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP6, SpecialAddress::Wildcard, "3389"));
+        GetAddrInfo(Protocol::UDP6, SpecialAddress::Wildcard, 3389));
 }
 
 TEST(GetAddrInfo, SizeIP4AndIP6)
 {
-    GetAddrInfo tcpLoopback{Protocol::TCP, SpecialAddress::Loopback, "1234"};
+    GetAddrInfo tcpLoopback{Protocol::TCP, SpecialAddress::Loopback, 1234};
     EXPECT_EQ(tcpLoopback.size(), 2);
 
-    GetAddrInfo udpLoopback{Protocol::UDP, SpecialAddress::Loopback, "1234"};
+    GetAddrInfo udpLoopback{Protocol::UDP, SpecialAddress::Loopback, 1234};
     EXPECT_EQ(udpLoopback.size(), 2);
 
-    GetAddrInfo tcpWildcard{Protocol::TCP, SpecialAddress::Wildcard, "1234"};
+    GetAddrInfo tcpWildcard{Protocol::TCP, SpecialAddress::Wildcard, 1234};
     EXPECT_EQ(tcpWildcard.size(), 2);
 
-    GetAddrInfo udpWildcard{Protocol::UDP, SpecialAddress::Wildcard, "1234"};
+    GetAddrInfo udpWildcard{Protocol::UDP, SpecialAddress::Wildcard, 1234};
     EXPECT_EQ(udpWildcard.size(), 2);
 }
 
 TEST(GetAddrInfo, SizeIP4)
 {
-    GetAddrInfo tcpLoopback{Protocol::TCP4, SpecialAddress::Loopback, "1234"};
+    GetAddrInfo tcpLoopback{Protocol::TCP4, SpecialAddress::Loopback, 1234};
     EXPECT_EQ(tcpLoopback.size(), 1);
 
-    GetAddrInfo udpLoopback{Protocol::UDP4, SpecialAddress::Loopback, "1234"};
+    GetAddrInfo udpLoopback{Protocol::UDP4, SpecialAddress::Loopback, 1234};
     EXPECT_EQ(udpLoopback.size(), 1);
 
-    GetAddrInfo tcpWildcard{Protocol::TCP4, SpecialAddress::Wildcard, "1234"};
+    GetAddrInfo tcpWildcard{Protocol::TCP4, SpecialAddress::Wildcard, 1234};
     EXPECT_EQ(tcpWildcard.size(), 1);
 
-    GetAddrInfo udpWildcard{Protocol::UDP4, SpecialAddress::Wildcard, "1234"};
+    GetAddrInfo udpWildcard{Protocol::UDP4, SpecialAddress::Wildcard, 1234};
     EXPECT_EQ(udpWildcard.size(), 1);
 }
 
 TEST(GetAddrInfo, SizeIP6)
 {
-    GetAddrInfo tcpLoopback{Protocol::TCP6, SpecialAddress::Loopback, "1236"};
+    GetAddrInfo tcpLoopback{Protocol::TCP6, SpecialAddress::Loopback, 1236};
     EXPECT_EQ(tcpLoopback.size(), 1);
 
-    GetAddrInfo udpLoopback{Protocol::UDP6, SpecialAddress::Loopback, "1236"};
+    GetAddrInfo udpLoopback{Protocol::UDP6, SpecialAddress::Loopback, 1236};
     EXPECT_EQ(udpLoopback.size(), 1);
 
-    GetAddrInfo tcpWildcard{Protocol::TCP6, SpecialAddress::Wildcard, "1236"};
+    GetAddrInfo tcpWildcard{Protocol::TCP6, SpecialAddress::Wildcard, 1236};
     EXPECT_EQ(tcpWildcard.size(), 1);
 
-    GetAddrInfo udpWildcard{Protocol::UDP6, SpecialAddress::Wildcard, "1236"};
+    GetAddrInfo udpWildcard{Protocol::UDP6, SpecialAddress::Wildcard, 1236};
     EXPECT_EQ(udpWildcard.size(), 1);
 }
 #endif /* BUILD_UNIT_TESTS */
