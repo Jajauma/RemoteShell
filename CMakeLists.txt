@@ -14,10 +14,10 @@ add_library(${PROJECT_NAME}.Classes OBJECT
     System/GetNameInfo.cpp
     System/SystemCall.cpp)
 add_executable(ShellClient
-    Application/ShellClient.cpp
+    ShellClient/Main.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 add_executable(ShellServer
-    Application/ShellServer.cpp
+    ShellServer/Main.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 
 if (BUILD_UNIT_TESTS)
