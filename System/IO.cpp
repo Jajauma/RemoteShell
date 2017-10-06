@@ -1,6 +1,5 @@
 #include "IO.hpp"
 #include "Cxx/Assert.hpp"
-#include "FileDescriptor.hpp"
 
 #include <cerrno>
 #include <system_error>
@@ -39,9 +38,9 @@ IOResult::operator bool() const
 }
 
 IOResult
-System::read(const FileDescriptor& fd, IOBuffer& buffer)
+System::read(FileDescriptor::Handle fd, IOBuffer& buffer)
 {
-    auto ret = ::read(fd.toNative(), buffer.begin(), buffer.size());
+    auto ret = ::read(fd, buffer.begin(), buffer.size());
     if (ret == -1)
         switch (errno)
         {
@@ -55,12 +54,12 @@ System::read(const FileDescriptor& fd, IOBuffer& buffer)
 }
 
 IOResult
-System::write(const FileDescriptor& fd, const IOBuffer& buffer,
-              std::size_t count)
+System::write(FileDescriptor::Handle fd, const IOBuffer& buffer,
+              IOBuffer::size_type count)
 {
     CXX_VALIDATE_ARG(!(count > buffer.size()));
 
-    auto ret = ::write(fd.toNative(), buffer.cbegin(), count);
+    auto ret = ::write(fd, buffer.cbegin(), count);
     if (ret == -1)
         switch (errno)
         {
@@ -71,6 +70,19 @@ System::write(const FileDescriptor& fd, const IOBuffer& buffer,
         }
 
     return IOResult{ret};
+}
+
+IOResult
+System::read(const FileDescriptor& fd, IOBuffer& buffer)
+{
+    return read(fd.toNative(), buffer);
+}
+
+IOResult
+System::write(const FileDescriptor& fd, const IOBuffer& buffer,
+              IOBuffer::size_type count)
+{
+    return write(fd.toNative(), buffer, count);
 }
 
 #if defined(BUILD_UNIT_TESTS)
