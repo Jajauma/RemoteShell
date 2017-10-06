@@ -15,6 +15,11 @@ using namespace System;
 
 static constexpr FileDescriptor::Handle None = -1;
 
+FileDescriptor::FileDescriptor()
+    : mHandle(None)
+{
+}
+
 FileDescriptor::FileDescriptor(Handle fd)
     : mHandle{fd}
 {
@@ -72,5 +77,10 @@ FileDescriptor::closeUninterrubtible()
 TEST(FileDescriptor, InvalidArguments)
 {
     EXPECT_THROW(FileDescriptor(-1), std::invalid_argument);
+}
+
+TEST(FileDescriptor, ConstructorWithoutArguments)
+{
+    EXPECT_NO_THROW(FileDescriptor());
 }
 #endif /* BUILD_UNIT_TESTS */

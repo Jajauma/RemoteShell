@@ -7,6 +7,7 @@ class FileDescriptor
 public:
     using Handle = int;
 
+    FileDescriptor();
     explicit FileDescriptor(Handle fd);
     FileDescriptor(FileDescriptor&& other);
     FileDescriptor& operator=(FileDescriptor&& other);
