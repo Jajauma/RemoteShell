@@ -14,8 +14,8 @@ public:
 
     IOResult();
     explicit IOResult(BytesCount count);
+    bool isInterrupted() const;
     BytesCount count() const;
-    operator bool() const;
 
 private:
     BytesCount mCount;

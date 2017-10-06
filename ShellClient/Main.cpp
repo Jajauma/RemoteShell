@@ -69,7 +69,7 @@ main(int argc, char* argv[])
             {
                 System::IOBuffer buf;
                 auto socketRead = System::read(conn, buf);
-                if (!socketRead)
+                if (socketRead.isInterrupted())
                     continue;
                 std::cerr << "Socket: +" << socketRead.count() << " bytes"
                           << std::endl;
@@ -86,14 +86,14 @@ main(int argc, char* argv[])
                     {
                         stdoutWrite = System::write(
                             STDOUT_FILENO, buf, socketRead.count());
-                    } while (!stdoutWrite);
+                    } while (stdoutWrite.isInterrupted());
                 }
             }
             if (FD_ISSET(STDIN_FILENO, &rset))
             {
                 System::IOBuffer buf;
                 auto stdinRead = System::read(STDIN_FILENO, buf);
-                if (!stdinRead)
+                if (stdinRead.isInterrupted())
                     continue;
                 std::cerr << "Standard input: +" << stdinRead.count()
                           << " bytes" << std::endl;
@@ -110,7 +110,7 @@ main(int argc, char* argv[])
                     {
                         socketWrite
                             = System::write(conn, buf, stdinRead.count());
-                    } while (!socketWrite);
+                    } while (socketWrite.isInterrupted());
                 }
             }
         }
