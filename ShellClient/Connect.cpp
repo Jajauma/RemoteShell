@@ -3,7 +3,7 @@
 #include "System/FileDescriptor.hpp"
 #include "System/GetAddrInfo.hpp"
 #include "System/GetNameInfo.hpp"
-#include "System/SystemCall.hpp"
+#include "System/Socket.hpp"
 
 #include <cerrno>
 #include <iostream>
@@ -19,8 +19,8 @@ ShellClient::connect(const System::GetAddrInfo& addrList)
         std::cerr << "Trying " << name.host() << ":" << name.service()
                   << " ... " << std::flush;
 
-        System::FileDescriptor sk{
-            System::socket(addr.ai_family, addr.ai_socktype, addr.ai_protocol)};
+        System::FileDescriptor sk = System::socket(
+            addr.ai_family, addr.ai_socktype, addr.ai_protocol);
 
         if (::connect(sk.toNative(), addr.ai_addr, addr.ai_addrlen) != 0)
         {

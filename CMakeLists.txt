@@ -12,7 +12,7 @@ add_library(${PROJECT_NAME}.Classes OBJECT
     System/FileDescriptor.cpp
     System/GetAddrInfo.cpp
     System/GetNameInfo.cpp
-    System/SystemCall.cpp)
+    System/Socket.cpp)
 add_executable(ShellClient
     ShellClient/Connect.cpp
     ShellClient/Main.cpp
