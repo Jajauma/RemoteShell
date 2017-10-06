@@ -9,6 +9,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 add_library(${PROJECT_NAME}.Classes OBJECT
     Cxx/Assert.cpp
+    System/FileDescriptor.cpp
     System/GetAddrInfo.cpp
     System/GetNameInfo.cpp
     System/SystemCall.cpp)
