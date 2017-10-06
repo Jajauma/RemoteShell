@@ -1,5 +1,11 @@
 #include "IO.hpp"
 #include "Cxx/Assert.hpp"
+#include "FileDescriptor.hpp"
+
+#include <cerrno>
+#include <system_error>
+
+#include <unistd.h>
 
 #if defined(BUILD_UNIT_TESTS)
 #include <gtest/gtest.h>
@@ -30,6 +36,41 @@ IOResult::count() const
 IOResult::operator bool() const
 {
     return !mInterrupted;
+}
+
+IOResult
+System::read(const FileDescriptor& fd, IOBuffer& buffer)
+{
+    auto ret = ::read(fd.toNative(), buffer.begin(), buffer.size());
+    if (ret == -1)
+        switch (errno)
+        {
+        case EINTR:
+            return IOResult{};
+        default:
+            throw std::system_error{errno, std::system_category()};
+        }
+
+    return IOResult{ret};
+}
+
+IOResult
+System::write(const FileDescriptor& fd, const IOBuffer& buffer,
+              std::size_t count)
+{
+    CXX_VALIDATE_ARG(!(count > buffer.size()));
+
+    auto ret = ::write(fd.toNative(), buffer.cbegin(), count);
+    if (ret == -1)
+        switch (errno)
+        {
+        case EINTR:
+            return IOResult{};
+        default:
+            throw std::system_error{errno, std::system_category()};
+        }
+
+    return IOResult{ret};
 }
 
 #if defined(BUILD_UNIT_TESTS)
