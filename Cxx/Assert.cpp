@@ -20,6 +20,6 @@ TEST(Assert, CxxValidateArg)
 TEST(Assert, CxxAssert)
 {
     EXPECT_NO_THROW(CXX_ASSERT(2 + 2 == 4));
-    EXPECT_THROW(CXX_ASSERT(-1 > 1), std::runtime_error);
+    EXPECT_THROW(CXX_ASSERT(-1 > 1), std::logic_error);
 }
 #endif /* BUILD_UNIT_TESTS */

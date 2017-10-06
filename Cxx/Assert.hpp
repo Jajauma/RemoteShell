@@ -24,7 +24,7 @@
             std::ostringstream tmp;                                           \
             tmp << "Assertion `" #condition "` failed in " << __FILE__ << ":" \
                 << __LINE__;                                                  \
-            throw std::runtime_error{tmp.str()};                              \
+            throw std::logic_error{tmp.str()};                                \
         }                                                                     \
     } while (false)
 
