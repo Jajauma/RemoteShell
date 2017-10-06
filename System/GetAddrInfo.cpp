@@ -270,27 +270,23 @@ TEST(GetAddrInfo, InvalidArguments)
 
 TEST(GetAddrInfo, ConstructorSpecial)
 {
-    EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP, SpecialAddress::Loopback, 3389));
+    EXPECT_NO_THROW(GetAddrInfo(Protocol::TCP, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::TCP4, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::TCP6, SpecialAddress::Loopback, 3389));
-    EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::TCP, SpecialAddress::Wildcard, 3389));
+    EXPECT_NO_THROW(GetAddrInfo(Protocol::TCP, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::TCP4, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::TCP6, SpecialAddress::Wildcard, 3389));
 
-    EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP, SpecialAddress::Loopback, 3389));
+    EXPECT_NO_THROW(GetAddrInfo(Protocol::UDP, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::UDP4, SpecialAddress::Loopback, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::UDP6, SpecialAddress::Loopback, 3389));
-    EXPECT_NO_THROW(
-        GetAddrInfo(Protocol::UDP, SpecialAddress::Wildcard, 3389));
+    EXPECT_NO_THROW(GetAddrInfo(Protocol::UDP, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(
         GetAddrInfo(Protocol::UDP4, SpecialAddress::Wildcard, 3389));
     EXPECT_NO_THROW(

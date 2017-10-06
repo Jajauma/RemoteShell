@@ -14,6 +14,7 @@ add_library(${PROJECT_NAME}.Classes OBJECT
     System/GetNameInfo.cpp
     System/SystemCall.cpp)
 add_executable(ShellClient
+    ShellClient/Connect.cpp
     ShellClient/Main.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 add_executable(ShellServer
