@@ -6,7 +6,6 @@
 #include <string>
 #include <system_error>
 
-#include <netdb.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 

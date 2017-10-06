@@ -3,7 +3,7 @@
 
 #include <iterator>
 
-struct addrinfo;
+#include <netdb.h>
 
 namespace System {
 enum class Protocol { TCP, TCP4, TCP6, UDP, UDP4, UDP6 };
