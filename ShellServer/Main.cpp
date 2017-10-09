@@ -1,12 +1,36 @@
-#include "Cxx/Unused.hpp"
+#include "Bind.hpp"
+#include "System/FileDescriptor.hpp"
 
+#include <cstdlib>
 #include <iostream>
+
+#include <unistd.h>
 
 int
 main(int argc, char* argv[])
 {
-    Cxx::Unused(argc);
-    Cxx::Unused(argv);
-    std::cout << "Shell server stub" << std::endl;
-    return 0;
+    System::FileDescriptor serverSocket;
+    try
+    {
+        switch (argc)
+        {
+        case 2:
+            serverSocket = ShellServer::bind(argv[1]);
+            break;
+        case 3:
+            serverSocket = ShellServer::bind(argv[1], argv[2]);
+            break;
+        default:
+            std::cerr << "Usage: " << argv[0] << " [<addr>] <port>"
+                      << std::endl;
+            return EXIT_FAILURE;
+        }
+        ::pause();
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }

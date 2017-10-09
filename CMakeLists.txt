@@ -22,6 +22,7 @@ add_executable(ShellClient
     ShellClient/MultiplexIOLoop.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 add_executable(ShellServer
+    ShellServer/Bind.cpp
     ShellServer/Main.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 
