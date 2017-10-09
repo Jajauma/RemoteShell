@@ -1,5 +1,4 @@
 #include "Connect.hpp"
-
 #include "System/FileDescriptor.hpp"
 #include "System/GetAddrInfo.hpp"
 #include "System/GetNameInfo.hpp"
@@ -22,19 +21,24 @@ ShellClient::connect(const System::GetAddrInfo& addrList)
         System::FileDescriptor sk = System::socket(
             addr.ai_family, addr.ai_socktype, addr.ai_protocol);
 
-        if (::connect(sk.toNative(), addr.ai_addr, addr.ai_addrlen) != 0)
+        try
         {
-            std::cerr << "[ERROR]" << std::endl;
-            throw std::system_error{errno, std::system_category()};
+            if (::connect(sk.toNative(), addr.ai_addr, addr.ai_addrlen) == 0)
+            {
+                std::cerr << "[OK]" << std::endl;
+                return sk;
+            }
+            else
+                throw std::system_error{errno, std::system_category()};
         }
-        else
+        catch (std::exception& e)
         {
-            std::cerr << "[OK]" << std::endl;
-            return sk;
+            std::cerr << "[" << e.what() << "]" << std::endl;
+            continue;
         }
     }
 
-    throw std::runtime_error{"No more addresses left"};
+    throw std::runtime_error{"Can't establish network connection."};
 }
 
 System::FileDescriptor
