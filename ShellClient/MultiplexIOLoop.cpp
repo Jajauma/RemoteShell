@@ -4,7 +4,6 @@
 #include "System/Shutdown.hpp"
 
 #include <cerrno>
-#include <iostream>
 #include <stdexcept>
 #include <system_error>
 
@@ -53,8 +52,6 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
                 }
                 else
                 {
-                    std::cerr << "Socket: +" << socketRead.count() << " bytes"
-                              << std::endl;
                     System::IOResult stdoutWrite;
                     do
                     {
@@ -71,7 +68,6 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
                     continue;
                 if (stdinRead.count() == 0)
                 {
-                    std::cerr << "Standard input: EOF" << std::endl;
                     standardInputEOF = true;
                     System::shutdownWrite(conn);
                     FD_CLR(STDIN_FILENO, &rset);
@@ -79,8 +75,6 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
                 }
                 else
                 {
-                    std::cerr << "Standard input: +" << stdinRead.count()
-                              << " bytes" << std::endl;
                     System::IOResult socketWrite;
                     do
                     {
