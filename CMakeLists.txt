@@ -14,6 +14,7 @@ add_library(${PROJECT_NAME}.Classes OBJECT
     System/GetAddrInfoErrorCategory.cpp
     System/GetNameInfo.cpp
     System/IO.cpp
+    System/Listen.cpp
     System/Shutdown.cpp
     System/Socket.cpp)
 add_executable(ShellClient

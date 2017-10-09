@@ -1,5 +1,6 @@
 #include "Bind.hpp"
 #include "System/FileDescriptor.hpp"
+#include "System/Listen.hpp"
 
 #include <cstdlib>
 #include <iostream>
@@ -25,6 +26,7 @@ main(int argc, char* argv[])
                       << std::endl;
             return EXIT_FAILURE;
         }
+        System::listen(serverSocket);
         ::pause();
     }
     catch (std::exception& e)
