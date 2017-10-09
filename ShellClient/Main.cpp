@@ -10,6 +10,7 @@
 #include "Connect.hpp"
 #include "System/FileDescriptor.hpp"
 #include "System/IO.hpp"
+#include "System/Shutdown.hpp"
 
 int
 main(int argc, char* argv[])
@@ -40,17 +41,15 @@ main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    bool checkStandardInput{true};
-    bool checkSocket{true};
-
+    bool standardInputEOF{false};
     fd_set rset;
     FD_ZERO(&rset);
+
     while (true)
     {
-        if (checkStandardInput)
+        if (!standardInputEOF)
             FD_SET(STDIN_FILENO, &rset);
-        if (checkSocket)
-            FD_SET(conn.toNative(), &rset);
+        FD_SET(conn.toNative(), &rset);
         auto maxFD1 = std::max(static_cast<int>(STDIN_FILENO),
                                static_cast<int>(conn.toNative()))
                       + 1;
@@ -71,16 +70,17 @@ main(int argc, char* argv[])
                 auto socketRead = System::read(conn, buf);
                 if (socketRead.isInterrupted())
                     continue;
-                std::cerr << "Socket: +" << socketRead.count() << " bytes"
-                          << std::endl;
-                if (!socketRead.count())
+                if (socketRead.count() == 0)
                 {
-                    std::cerr << "Socket: EOF" << std::endl;
-                    FD_CLR(conn.toNative(), &rset);
-                    checkSocket = false;
+                    if (standardInputEOF)
+                        return EXIT_SUCCESS;
+                    else
+                        throw "Server terminated prematurely";
                 }
-                if (socketRead.count() > 0)
+                else
                 {
+                    std::cerr << "Socket: +" << socketRead.count() << " bytes"
+                              << std::endl;
                     System::IOResult stdoutWrite;
                     do
                     {
@@ -95,16 +95,18 @@ main(int argc, char* argv[])
                 auto stdinRead = System::read(STDIN_FILENO, buf);
                 if (stdinRead.isInterrupted())
                     continue;
-                std::cerr << "Standard input: +" << stdinRead.count()
-                          << " bytes" << std::endl;
-                if (!stdinRead.count())
+                if (stdinRead.count() == 0)
                 {
                     std::cerr << "Standard input: EOF" << std::endl;
+                    standardInputEOF = true;
+                    System::shutdownWrite(conn);
                     FD_CLR(STDIN_FILENO, &rset);
-                    checkStandardInput = false;
+                    continue;
                 }
-                if (stdinRead.count() > 0)
+                else
                 {
+                    std::cerr << "Standard input: +" << stdinRead.count()
+                              << " bytes" << std::endl;
                     System::IOResult socketWrite;
                     do
                     {
