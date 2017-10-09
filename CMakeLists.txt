@@ -21,7 +21,7 @@ add_library(${PROJECT_NAME}.Classes OBJECT
     Cxx/Assert.cpp
     System/FileDescriptor.cpp
     System/GetAddrInfo.cpp
-    System/GetAddrInfoErrors.cpp
+    System/GetAddrInfoErrorCategory.cpp
     System/GetNameInfo.cpp
     System/IO.cpp
     System/Shutdown.cpp
