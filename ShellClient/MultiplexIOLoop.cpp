@@ -32,7 +32,7 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
             case EINTR:
                 continue;
             default:
-                throw std::system_error{errno, std::system_category()};
+                throw std::system_error{errno, std::generic_category()};
             }
         else if (ret > 0)
         {

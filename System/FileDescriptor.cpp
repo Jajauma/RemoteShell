@@ -70,7 +70,7 @@ FileDescriptor::closeUninterrubtible()
         if (errno == EINTR)
             continue;
         else
-            throw std::system_error{errno, std::system_category()};
+            throw std::system_error{errno, std::generic_category()};
 }
 
 #if defined(BUILD_UNIT_TESTS)

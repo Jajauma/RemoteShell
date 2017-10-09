@@ -16,7 +16,7 @@ System::socket(int domain, int type, int protocol)
 {
     auto ret = ::socket(domain, type, protocol);
     if (ret == -1)
-        throw std::system_error{errno, std::system_category()};
+        throw std::system_error{errno, std::generic_category()};
 
     return System::FileDescriptor{ret};
 }
