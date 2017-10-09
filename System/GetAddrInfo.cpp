@@ -1,5 +1,6 @@
 #include "GetAddrInfo.hpp"
 #include "Cxx/Assert.hpp"
+#include "GetAddrInfoErrors.hpp"
 
 #include <cerrno>
 #include <cstring>
@@ -98,8 +99,7 @@ GetAddrInfo::GetAddrInfo(Protocol protocol, const char* host, const char* port)
 
     int ret = ::getaddrinfo(host, port, &hints, &mResult);
     if (ret != 0)
-        throw std::system_error{
-            errno, std::generic_category(), ::gai_strerror(ret)};
+        throw std::system_error{static_cast<GetAddrInfoErrc>(ret)};
 }
 
 GetAddrInfo::GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,
@@ -154,8 +154,7 @@ GetAddrInfo::GetAddrInfo(Protocol protocol, SpecialAddress specialAddress,
 
     int ret = ::getaddrinfo(nullptr, port, &hints, &mResult);
     if (ret != 0)
-        throw std::system_error{
-            errno, std::generic_category(), ::gai_strerror(ret)};
+        throw std::system_error{static_cast<GetAddrInfoErrc>(ret)};
 }
 
 GetAddrInfo::GetAddrInfo(GetAddrInfo&& other)
