@@ -1,5 +1,6 @@
 #include "GetNameInfo.hpp"
 #include "Cxx/Assert.hpp"
+#include "GetAddrInfoErrorCategory.hpp"
 
 #include <cstdlib>
 #include <system_error>
@@ -25,8 +26,7 @@ GetNameInfo::GetNameInfo(const sockaddr* addr, socklen_t addrLength)
                             MaxService,
                             NI_NUMERICHOST | NI_NUMERICSERV);
     if (ret != 0)
-        throw std::system_error{
-            errno, std::generic_category(), ::gai_strerror(ret)};
+        throw std::system_error{ret, GetAddrInfoErrorCategory()};
 }
 
 const char*

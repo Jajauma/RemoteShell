@@ -19,14 +19,20 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 add_library(${PROJECT_NAME}.Classes OBJECT
     Cxx/Assert.cpp
+    System/FileDescriptor.cpp
     System/GetAddrInfo.cpp
+    System/GetAddrInfoErrorCategory.cpp
     System/GetNameInfo.cpp
-    System/SystemCall.cpp)
+    System/IO.cpp
+    System/Shutdown.cpp
+    System/Socket.cpp)
 add_executable(ShellClient
-    Application/ShellClient.cpp
+    ShellClient/Connect.cpp
+    ShellClient/Main.cpp
+    ShellClient/MultiplexIOLoop.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 add_executable(ShellServer
-    Application/ShellServer.cpp
+    ShellServer/Main.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 
 if (BUILD_UNIT_TESTS)
