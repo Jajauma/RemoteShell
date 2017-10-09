@@ -1,11 +1,10 @@
 #include "Bind.hpp"
+#include "ProcessClientsLoop.hpp"
 #include "System/FileDescriptor.hpp"
 #include "System/Listen.hpp"
 
 #include <cstdlib>
 #include <iostream>
-
-#include <unistd.h>
 
 int
 main(int argc, char* argv[])
@@ -27,7 +26,7 @@ main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
         System::listen(serverSocket);
-        ::pause();
+        ShellServer::processClientsLoop(serverSocket);
     }
     catch (std::exception& e)
     {
