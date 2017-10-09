@@ -23,6 +23,7 @@ add_library(${PROJECT_NAME}.Classes OBJECT
     System/GetAddrInfo.cpp
     System/GetNameInfo.cpp
     System/IO.cpp
+    System/Shutdown.cpp
     System/Socket.cpp)
 add_executable(ShellClient
     ShellClient/Connect.cpp
