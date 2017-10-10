@@ -1,10 +1,10 @@
 #include "IO.hpp"
 #include "Cxx/Assert.hpp"
 
+#include <unistd.h>
+
 #include <cerrno>
 #include <system_error>
-
-#include <unistd.h>
 
 #if defined(BUILD_UNIT_TESTS)
 #include <gtest/gtest.h>

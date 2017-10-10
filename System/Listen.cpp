@@ -2,10 +2,11 @@
 #include "Cxx/Assert.hpp"
 #include "FileDescriptor.hpp"
 
+#include <sys/socket.h>
+#include <sys/types.h>
+
 #include <cerrno>
 #include <system_error>
-
-#include <sys/socket.h>
 
 #if defined(BUILD_UNIT_TESTS)
 #include <gtest/gtest.h>

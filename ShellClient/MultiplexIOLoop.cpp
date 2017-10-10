@@ -3,12 +3,12 @@
 #include "System/IO.hpp"
 #include "System/Shutdown.hpp"
 
+#include <sys/select.h>
+#include <unistd.h>
+
 #include <cerrno>
 #include <stdexcept>
 #include <system_error>
-
-#include <sys/select.h>
-#include <unistd.h>
 
 void
 ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)

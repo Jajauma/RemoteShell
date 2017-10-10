@@ -4,6 +4,9 @@
 #include "System/GetNameInfo.hpp"
 #include "System/Socket.hpp"
 
+#include <sys/socket.h>
+#include <sys/types.h>
+
 #include <cerrno>
 #include <iostream>
 #include <stdexcept>

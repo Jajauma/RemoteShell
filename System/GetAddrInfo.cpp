@@ -2,13 +2,13 @@
 #include "Cxx/Assert.hpp"
 #include "GetAddrInfoErrorCategory.hpp"
 
+#include <sys/socket.h>
+#include <sys/types.h>
+
 #include <cerrno>
 #include <cstring>
 #include <string>
 #include <system_error>
-
-#include <sys/socket.h>
-#include <sys/types.h>
 
 #if defined(BUILD_UNIT_TESTS)
 #include <gtest/gtest.h>

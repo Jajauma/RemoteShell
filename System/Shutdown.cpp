@@ -1,10 +1,10 @@
 #include "Shutdown.hpp"
 #include "FileDescriptor.hpp"
 
+#include <sys/socket.h>
+
 #include <cerrno>
 #include <system_error>
-
-#include <sys/socket.h>
 
 namespace System {
 void

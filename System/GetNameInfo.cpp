@@ -2,10 +2,10 @@
 #include "Cxx/Assert.hpp"
 #include "GetAddrInfoErrorCategory.hpp"
 
+#include <netdb.h>
+
 #include <cstdlib>
 #include <system_error>
-
-#include <netdb.h>
 
 #if defined(BUILD_UNIT_TESTS)
 #include <gtest/gtest.h>
