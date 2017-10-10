@@ -31,6 +31,7 @@ ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
     else if (ret == 0)
     {
         serverSocket.close();
+        ::sleep(5);
         std::exit(0);
     }
 }
