@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <sys/socket.h>
 
+#include <cerrno>
 #include <cstring>
 #include <iostream>
 #include <system_error>
