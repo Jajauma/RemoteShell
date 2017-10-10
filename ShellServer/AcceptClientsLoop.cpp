@@ -61,11 +61,19 @@ ShellServer::acceptClientsLoop(System::FileDescriptor& serverSocket)
                 throw std::system_error{errno, std::generic_category()};
             }
 
-        System::FileDescriptor clientSocket{ret};
-        System::GetNameInfo peerName{&clientAddress, clientAddressLength};
-        std::cerr << "Accepted connection from " << peerName.host() << ":"
-                  << peerName.service() << std::endl;
+        std::cerr << "Accepted connection from ";
+        try
+        {
+            System::GetNameInfo peerName{&clientAddress, clientAddressLength};
+            std::cerr << peerName.host() << ":" << peerName.service()
+                      << std::endl;
+        }
+        catch (std::exception& e)
+        {
+            std::cerr << "unknown peer (" << e.what() << ")" << std::endl;
+        }
 
+        System::FileDescriptor clientSocket{ret};
         processClientAsync(serverSocket, clientSocket);
     }
 }
