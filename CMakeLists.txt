@@ -23,9 +23,10 @@ add_executable(ShellClient
     ShellClient/MultiplexIOLoop.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 add_executable(ShellServer
+    ShellServer/AcceptClientsLoop.cpp
     ShellServer/Bind.cpp
     ShellServer/Main.cpp
-    ShellServer/AcceptClientsLoop.cpp
+    ShellServer/ProcessClientAsync.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 
 if (BUILD_UNIT_TESTS)

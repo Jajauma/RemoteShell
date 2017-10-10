@@ -1,5 +1,6 @@
 #include "AcceptClientsLoop.hpp"
 #include "Cxx/Unused.hpp"
+#include "ProcessClientAsync.hpp"
 #include "System/FileDescriptor.hpp"
 #include "System/GetNameInfo.hpp"
 
@@ -57,5 +58,7 @@ ShellServer::acceptClientsLoop(System::FileDescriptor& serverSocket)
         System::GetNameInfo peerName(&clientAddress, clientAddressLength);
         std::cerr << "Accepted connection from " << peerName.host() << ":"
                   << peerName.service() << std::endl;
+
+        processClientAsync(serverSocket, clientSocket);
     }
 }
