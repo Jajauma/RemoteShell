@@ -27,7 +27,6 @@ ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
             throw std::system_error{errno, std::generic_category()};
         }
     else if (ret == 0)
-    {
         try
         {
             serverSocket.close();
@@ -46,5 +45,4 @@ ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
         {
             std::exit(EXIT_FAILURE);
         }
-    }
 }
