@@ -1,5 +1,6 @@
 #include "IO.hpp"
 #include "Cxx/Assert.hpp"
+#include "FileDescriptor.hpp"
 
 #include <unistd.h>
 
@@ -39,7 +40,7 @@ IOResult::count() const
 }
 
 IOResult
-System::read(FileDescriptor::Handle fd, IOBuffer& buffer)
+System::read(int fd, IOBuffer& buffer)
 {
     auto ret = ::read(fd, buffer.begin(), buffer.size());
     if (ret == -1)
@@ -55,8 +56,7 @@ System::read(FileDescriptor::Handle fd, IOBuffer& buffer)
 }
 
 IOResult
-System::write(FileDescriptor::Handle fd, const IOBuffer& buffer,
-              IOBuffer::size_type count)
+System::write(int fd, const IOBuffer& buffer, IOBuffer::size_type count)
 {
     CXX_VALIDATE_ARG(!(count > buffer.size()));
 

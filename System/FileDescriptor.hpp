@@ -5,19 +5,18 @@ namespace System {
 class FileDescriptor
 {
 public:
-    using Handle = int;
-
     FileDescriptor();
-    explicit FileDescriptor(Handle fd);
+    explicit FileDescriptor(int fd);
     FileDescriptor(FileDescriptor&& other);
     FileDescriptor& operator=(FileDescriptor&& other);
     ~FileDescriptor();
 
-    Handle toNative() const;
+    int toNative() const;
     void close();
 
 private:
-    Handle mHandle;
+    static constexpr int None{-1};
+    int mHandle;
 };
 } /* namespace System  */
 

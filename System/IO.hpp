@@ -1,10 +1,12 @@
 #ifndef HEADER_920B97B8_AAAB_11E7_A376_74D435E5BEA6_INCLUDED
 #define HEADER_920B97B8_AAAB_11E7_A376_74D435E5BEA6_INCLUDED
 
-#include "FileDescriptor.hpp"
-
 #include <array>
 #include <cstddef>
+
+namespace System {
+class FileDescriptor;
+} /* namespace System */
 
 namespace System {
 class IOResult
@@ -24,9 +26,8 @@ private:
 
 using IOBuffer = std::array<char, 4096>;
 
-IOResult read(FileDescriptor::Handle fd, IOBuffer& buffer);
-IOResult write(FileDescriptor::Handle fd, const IOBuffer& buffer,
-               IOBuffer::size_type count);
+IOResult read(int fd, IOBuffer& buffer);
+IOResult write(int fd, const IOBuffer& buffer, IOBuffer::size_type count);
 
 IOResult read(const FileDescriptor& fd, IOBuffer& buffer);
 IOResult write(const FileDescriptor& fd, const IOBuffer& buffer,

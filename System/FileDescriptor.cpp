@@ -13,14 +13,12 @@
 
 using namespace System;
 
-static constexpr FileDescriptor::Handle None = -1;
-
 FileDescriptor::FileDescriptor()
     : mHandle{None}
 {
 }
 
-FileDescriptor::FileDescriptor(Handle fd)
+FileDescriptor::FileDescriptor(int fd)
     : mHandle{fd}
 {
     CXX_VALIDATE_ARG(!(fd < 0));
@@ -55,7 +53,7 @@ FileDescriptor::~FileDescriptor()
     }
 }
 
-FileDescriptor::Handle
+int
 FileDescriptor::toNative() const
 {
     CXX_ASSERT(mHandle != None);
