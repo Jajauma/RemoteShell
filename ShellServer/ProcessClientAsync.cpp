@@ -1,5 +1,6 @@
 #include "ProcessClientAsync.hpp"
 #include "Cxx/Unused.hpp"
+#include "System/FileDescriptor.hpp"
 
 #include <unistd.h>
 
@@ -12,7 +13,6 @@ void
 ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
                                 System::FileDescriptor& clientSocket)
 {
-    Cxx::Unused(serverSocket);
     Cxx::Unused(clientSocket);
 
     auto ret = ::fork();
@@ -30,6 +30,7 @@ ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
         }
     else if (ret == 0)
     {
+        serverSocket.close();
         std::exit(0);
     }
 }

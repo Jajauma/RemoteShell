@@ -14,9 +14,9 @@ public:
     ~FileDescriptor();
 
     Handle toNative() const;
+    void close();
 
 private:
-    void closeUninterrubtible();
     Handle mHandle;
 };
 } /* namespace System  */
