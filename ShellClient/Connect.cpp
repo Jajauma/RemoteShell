@@ -21,8 +21,8 @@ ShellClient::connect(const System::GetAddrInfo& addrList)
         std::cerr << "Trying " << name.host() << ":" << name.service()
                   << " ... " << std::flush;
 
-        System::FileDescriptor sk = System::socket(
-            addr.ai_family, addr.ai_socktype, addr.ai_protocol);
+        System::FileDescriptor sk{
+            System::socket(addr.ai_family, addr.ai_socktype, addr.ai_protocol)};
 
         try
         {

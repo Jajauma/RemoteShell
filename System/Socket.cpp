@@ -25,23 +25,18 @@ System::socket(int domain, int type, int protocol)
 #if defined(BUILD_UNIT_TESTS)
 TEST(Socket, InvalidArguments)
 {
-    EXPECT_THROW(System::FileDescriptor sk = System::socket(1234, 5678, -90),
-                 std::system_error);
+    EXPECT_THROW(System::socket(1234, 5678, -90), std::system_error);
 }
 
 TEST(Socket, UDP)
 {
-    EXPECT_NO_THROW(System::FileDescriptor sk4
-                    = System::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
-    EXPECT_NO_THROW(System::FileDescriptor sk6
-                    = System::socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP));
+    EXPECT_NO_THROW(System::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
+    EXPECT_NO_THROW(System::socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP));
 }
 
 TEST(Socket, TCP)
 {
-    EXPECT_NO_THROW(System::FileDescriptor sk4
-                    = System::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
-    EXPECT_NO_THROW(System::FileDescriptor sk6
-                    = System::socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP));
+    EXPECT_NO_THROW(System::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
+    EXPECT_NO_THROW(System::socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP));
 }
 #endif /* BUILD_UNIT_TESTS */
