@@ -55,7 +55,7 @@ ShellServer::acceptClientsLoop(System::FileDescriptor& serverSocket)
             }
 
         System::FileDescriptor clientSocket{ret};
-        System::GetNameInfo peerName(&clientAddress, clientAddressLength);
+        System::GetNameInfo peerName{&clientAddress, clientAddressLength};
         std::cerr << "Accepted connection from " << peerName.host() << ":"
                   << peerName.service() << std::endl;
 
