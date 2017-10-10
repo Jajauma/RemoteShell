@@ -1,4 +1,4 @@
-#include "ProcessClientsLoop.hpp"
+#include "AcceptClientsLoop.hpp"
 #include "Cxx/Unused.hpp"
 #include "System/FileDescriptor.hpp"
 #include "System/GetNameInfo.hpp"
@@ -17,7 +17,7 @@ ReapChildProcess(int signalCode)
 }
 
 void
-ShellServer::processClientsLoop(System::FileDescriptor& serverSocket)
+ShellServer::acceptClientsLoop(System::FileDescriptor& serverSocket)
 {
     struct sigaction act;
     std::memset(&act, 0, sizeof(act));

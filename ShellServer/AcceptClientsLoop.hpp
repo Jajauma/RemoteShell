@@ -6,7 +6,7 @@ class FileDescriptor;
 } /* namespace System  */
 
 namespace ShellServer {
-void processClientsLoop(System::FileDescriptor& serverSocket);
+void acceptClientsLoop(System::FileDescriptor& serverSocket);
 } /* namespace ShellServer  */
 
 #endif /* end of the header guard */

@@ -25,7 +25,7 @@ add_executable(ShellClient
 add_executable(ShellServer
     ShellServer/Bind.cpp
     ShellServer/Main.cpp
-    ShellServer/ProcessClientsLoop.cpp
+    ShellServer/AcceptClientsLoop.cpp
     $<TARGET_OBJECTS:${PROJECT_NAME}.Classes>)
 
 if (BUILD_UNIT_TESTS)

@@ -1,5 +1,5 @@
+#include "AcceptClientsLoop.hpp"
 #include "Bind.hpp"
-#include "ProcessClientsLoop.hpp"
 #include "System/FileDescriptor.hpp"
 #include "System/Listen.hpp"
 
@@ -26,7 +26,7 @@ main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
         System::listen(serverSocket);
-        ShellServer::processClientsLoop(serverSocket);
+        ShellServer::acceptClientsLoop(serverSocket);
     }
     catch (std::exception& e)
     {
