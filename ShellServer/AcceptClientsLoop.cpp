@@ -16,7 +16,7 @@
 
 namespace {
 void
-ReapChildProcess(int signalCode)
+reapNextChildProcess(int signalCode)
 {
     int stat;
     auto ret = ::wait(&stat);
@@ -29,7 +29,7 @@ ShellServer::acceptClientsLoop(System::FileDescriptor& serverSocket)
 {
     struct sigaction act;
     std::memset(&act, 0, sizeof(act));
-    act.sa_handler = ReapChildProcess;
+    act.sa_handler = reapNextChildProcess;
 
     auto ret = ::sigaction(SIGCHLD, &act, nullptr);
     if (ret != 0)
