@@ -14,6 +14,7 @@
 #include <iostream>
 #include <system_error>
 
+namespace {
 void
 ReapChildProcess(int signalCode)
 {
@@ -22,6 +23,7 @@ ReapChildProcess(int signalCode)
     auto ret = ::wait(&stat);
     Cxx::Unused(ret);
 }
+} /* namespace */
 
 void
 ShellServer::acceptClientsLoop(System::FileDescriptor& serverSocket)
