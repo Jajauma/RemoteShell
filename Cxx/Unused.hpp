@@ -2,9 +2,9 @@
 #define HEADER_FFC77506_5BFF_11E7_8FF1_74D435E5BEA6_INCLUDED
 
 namespace Cxx {
-template <typename T>
+template <typename... Args>
 void
-Unused(T&&)
+Unused(Args&&...)
 {
 }
 } /* namespace Cxx  */

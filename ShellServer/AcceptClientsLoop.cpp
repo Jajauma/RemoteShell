@@ -18,10 +18,9 @@ namespace {
 void
 ReapChildProcess(int signalCode)
 {
-    Cxx::Unused(signalCode);
     int stat;
     auto ret = ::wait(&stat);
-    Cxx::Unused(ret);
+    Cxx::Unused(signalCode, ret);
 }
 } /* namespace */
 
