@@ -1,5 +1,5 @@
 #include "ProcessClientAsync.hpp"
-#include "Cxx/Unused.hpp"
+#include "System/Dup2.hpp"
 #include "System/FileDescriptor.hpp"
 
 #include <unistd.h>
@@ -13,8 +13,6 @@ void
 ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
                                 System::FileDescriptor& clientSocket)
 {
-    Cxx::Unused(clientSocket);
-
     auto ret = ::fork();
     if (ret == -1)
         switch (errno)
@@ -30,8 +28,23 @@ ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
         }
     else if (ret == 0)
     {
-        serverSocket.close();
-        ::sleep(5);
-        std::exit(0);
+        try
+        {
+            serverSocket.close();
+            System::dup2(clientSocket.toNative(), STDIN_FILENO);
+            System::dup2(clientSocket.toNative(), STDOUT_FILENO);
+            System::dup2(clientSocket.toNative(), STDERR_FILENO);
+            clientSocket.close();
+
+            auto ret = ::execlp("/bin/sh", "sh", nullptr);
+            if (ret == -1)
+                throw std::system_error{errno, std::generic_category()};
+
+            std::exit(EXIT_SUCCESS);
+        }
+        catch (std::exception& e)
+        {
+            std::exit(EXIT_FAILURE);
+        }
     }
 }
