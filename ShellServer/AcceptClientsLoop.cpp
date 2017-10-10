@@ -6,6 +6,8 @@
 
 #include <signal.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include <cerrno>
 #include <cstring>
@@ -16,6 +18,9 @@ void
 ReapChildProcess(int signalCode)
 {
     Cxx::Unused(signalCode);
+    int stat;
+    auto ret = ::wait(&stat);
+    Cxx::Unused(ret);
 }
 
 void
