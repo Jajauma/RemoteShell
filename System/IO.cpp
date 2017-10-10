@@ -48,7 +48,7 @@ System::read(FileDescriptor::Handle fd, IOBuffer& buffer)
         case EINTR:
             return IOResult{};
         default:
-            throw std::system_error{errno, std::system_category()};
+            throw std::system_error{errno, std::generic_category()};
         }
 
     return IOResult{ret};
@@ -67,7 +67,7 @@ System::write(FileDescriptor::Handle fd, const IOBuffer& buffer,
         case EINTR:
             return IOResult{};
         default:
-            throw std::system_error{errno, std::system_category()};
+            throw std::system_error{errno, std::generic_category()};
         }
 
     return IOResult{ret};

@@ -29,7 +29,7 @@ ShellClient::connect(const System::GetAddrInfo& addrList)
                 return sk;
             }
             else
-                throw std::system_error{errno, std::system_category()};
+                throw std::system_error{errno, std::generic_category()};
         }
         catch (std::exception& e)
         {
