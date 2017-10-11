@@ -13,30 +13,28 @@
 
 using namespace System;
 
-IOResult::IOResult()
-    : mCount{0}
-    , mInterrupted{true}
-{
-}
-
-IOResult::IOResult(BytesCount count)
+IOResult::IOResult(IOBuffer::size_type count)
     : mCount{count}
-    , mInterrupted{false}
 {
-    CXX_VALIDATE_ARG(count >= 0);
 }
 
-bool
-IOResult::isInterrupted() const
+IOResult::IOResult(const std::error_code& errorCode)
+    : mCount{0}
+    , mErrorCode{errorCode}
 {
-    return mInterrupted;
 }
 
-IOResult::BytesCount
+IOBuffer::size_type
 IOResult::count() const
 {
-    CXX_ASSERT(!mInterrupted);
+    CXX_ASSERT(!mErrorCode);
     return mCount;
+}
+
+const std::error_code&
+IOResult::errorCode() const
+{
+    return mErrorCode;
 }
 
 IOResult
@@ -44,15 +42,8 @@ System::read(int fd, IOBuffer& buffer)
 {
     auto ret = ::read(fd, buffer.begin(), buffer.size());
     if (ret == -1)
-        switch (errno)
-        {
-        case EINTR:
-            return IOResult{};
-        default:
-            throw std::system_error{errno, std::generic_category()};
-        }
-
-    return IOResult{ret};
+        return IOResult{std::error_code{errno, std::generic_category()}};
+    return IOResult{static_cast<IOBuffer::size_type>(ret)};
 }
 
 IOResult
@@ -62,15 +53,8 @@ System::write(int fd, const IOBuffer& buffer, IOBuffer::size_type count)
 
     auto ret = ::write(fd, buffer.cbegin(), count);
     if (ret == -1)
-        switch (errno)
-        {
-        case EINTR:
-            return IOResult{};
-        default:
-            throw std::system_error{errno, std::generic_category()};
-        }
-
-    return IOResult{ret};
+        return IOResult{std::error_code{errno, std::generic_category()}};
+    return IOResult{static_cast<IOBuffer::size_type>(ret)};
 }
 
 IOResult
@@ -87,29 +71,24 @@ System::write(const FileDescriptor& fd, const IOBuffer& buffer,
 }
 
 #if defined(BUILD_UNIT_TESTS)
-TEST(IO, IOResultConstructorWithoutArguments)
-{
-    IOResult ret;
-    EXPECT_TRUE(ret.isInterrupted());
-    EXPECT_THROW(ret.count(), std::logic_error);
-}
-
-TEST(IO, IOResultInvalidArguments)
-{
-    EXPECT_THROW(IOResult{-1}, std::logic_error);
-}
-
-TEST(IO, IOResultZero)
+TEST(IO, IOResultZeroCount)
 {
     IOResult ret{0};
-    EXPECT_FALSE(ret.isInterrupted());
+    EXPECT_NO_THROW(ret.count());
     EXPECT_EQ(ret.count(), 0);
 }
 
-TEST(IO, IOResultPositive)
+TEST(IO, IOResultNonZeroCount)
 {
     IOResult ret{4096};
-    EXPECT_FALSE(ret.isInterrupted());
+    EXPECT_NO_THROW(ret.count());
     EXPECT_EQ(ret.count(), 4096);
+}
+
+TEST(IO, IOResultErrorCode)
+{
+    IOResult ret{std::error_code{EINTR, std::generic_category()}};
+    EXPECT_TRUE(ret.errorCode() == std::errc::interrupted);
+    EXPECT_THROW(ret.count(), std::logic_error);
 }
 #endif /* BUILD_UNIT_TESTS */

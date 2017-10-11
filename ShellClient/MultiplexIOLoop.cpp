@@ -27,21 +27,13 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
         auto ret    = ::select(maxFD1, &rset, nullptr, nullptr, nullptr);
 
         if (ret == -1)
-            switch (errno)
-            {
-            case EINTR:
-                continue;
-            default:
-                throw std::system_error{errno, std::generic_category()};
-            }
+            throw std::system_error{errno, std::generic_category()};
         else if (ret > 0)
         {
             if (FD_ISSET(conn.toNative(), &rset))
             {
                 System::IOBuffer buf;
                 auto socketRead = System::read(conn, buf);
-                if (socketRead.isInterrupted())
-                    continue;
                 if (socketRead.count() == 0)
                 {
                     if (standardInputEOF)
@@ -51,21 +43,12 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
                             "Server terminated prematurely"};
                 }
                 else
-                {
-                    System::IOResult stdoutWrite;
-                    do
-                    {
-                        stdoutWrite = System::write(
-                            STDOUT_FILENO, buf, socketRead.count());
-                    } while (stdoutWrite.isInterrupted());
-                }
+                    (void)System::write(STDOUT_FILENO, buf, socketRead.count());
             }
             if (FD_ISSET(STDIN_FILENO, &rset))
             {
                 System::IOBuffer buf;
                 auto stdinRead = System::read(STDIN_FILENO, buf);
-                if (stdinRead.isInterrupted())
-                    continue;
                 if (stdinRead.count() == 0)
                 {
                     standardInputEOF = true;
@@ -75,12 +58,10 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
                 }
                 else
                 {
-                    System::IOResult socketWrite;
-                    do
-                    {
-                        socketWrite
-                            = System::write(conn, buf, stdinRead.count());
-                    } while (socketWrite.isInterrupted());
+                    auto errorCode = System::write(conn, buf, stdinRead.count())
+                                         .errorCode();
+                    if (errorCode)
+                        throw std::system_error{errorCode};
                 }
             }
         }
