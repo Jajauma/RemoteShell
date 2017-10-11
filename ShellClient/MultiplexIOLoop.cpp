@@ -11,7 +11,7 @@
 #include <system_error>
 
 void
-ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
+ShellClient::multiplexIOLoop(const System::FileDescriptor& clientSocket)
 {
     bool standardInputEOF{false};
     fd_set rset;
@@ -21,19 +21,19 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
     {
         if (!standardInputEOF)
             FD_SET(STDIN_FILENO, &rset);
-        FD_SET(conn.toNative(), &rset);
+        FD_SET(clientSocket.toNative(), &rset);
 
-        auto maxFD1 = std::max<int>(STDIN_FILENO, conn.toNative()) + 1;
+        auto maxFD1 = std::max<int>(STDIN_FILENO, clientSocket.toNative()) + 1;
         auto ret    = ::select(maxFD1, &rset, nullptr, nullptr, nullptr);
 
         if (ret == -1)
             throw std::system_error{errno, std::generic_category()};
         else if (ret > 0)
         {
-            if (FD_ISSET(conn.toNative(), &rset))
+            if (FD_ISSET(clientSocket.toNative(), &rset))
             {
                 System::IOBuffer buf;
-                auto socketRead = System::read(conn, buf);
+                auto socketRead = System::read(clientSocket, buf);
                 if (socketRead.count() == 0)
                 {
                     if (standardInputEOF)
@@ -52,14 +52,15 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& conn)
                 if (stdinRead.count() == 0)
                 {
                     standardInputEOF = true;
-                    System::shutdownWrite(conn);
+                    System::shutdownWrite(clientSocket);
                     FD_CLR(STDIN_FILENO, &rset);
                     continue;
                 }
                 else
                 {
-                    auto errorCode = System::write(conn, buf, stdinRead.count())
-                                         .errorCode();
+                    auto errorCode
+                        = System::write(clientSocket, buf, stdinRead.count())
+                              .errorCode();
                     if (errorCode)
                         throw std::system_error{errorCode};
                 }

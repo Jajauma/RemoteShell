@@ -6,7 +6,7 @@ class FileDescriptor;
 } /* namespace System */
 
 namespace ShellClient {
-void multiplexIOLoop(const System::FileDescriptor& conn);
+void multiplexIOLoop(const System::FileDescriptor& clientSocket);
 } /* namespace ShellClient */
 
 #endif /* end of the header guard */
