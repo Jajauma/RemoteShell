@@ -54,7 +54,6 @@ ShellClient::multiplexIOLoop(const System::FileDescriptor& clientSocket)
                     standardInputEOF = true;
                     System::shutdownWrite(clientSocket);
                     FD_CLR(STDIN_FILENO, &rset);
-                    continue;
                 }
                 else
                 {
