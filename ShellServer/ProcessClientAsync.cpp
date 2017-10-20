@@ -38,8 +38,6 @@ ShellServer::processClientAsync(System::FileDescriptor& serverSocket,
             auto ret = ::execlp("/bin/sh", "sh", nullptr);
             if (ret == -1)
                 throw std::system_error{errno, std::generic_category()};
-
-            std::exit(EXIT_SUCCESS);
         }
         catch (std::exception& e)
         {
