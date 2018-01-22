@@ -42,3 +42,6 @@ if (BUILD_UNIT_TESTS)
     enable_testing()
     add_test(Tests ${PROJECT_NAME}.Tests)
 endif()
+
+install(TARGETS ShellClient ShellServer
+    RUNTIME DESTINATION bin)
